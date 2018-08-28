@@ -1,2 +1,8 @@
 [server]
 addr = ":50000"
+
+[sql]                                                                                                                                  
+user = "test"                                                                                                                         
+password = "mypass"                                                                                                                    
+addr = "mysql:3306"                                                                                                                    
+db = "questionair"

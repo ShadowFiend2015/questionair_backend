@@ -20,6 +20,14 @@ type server struct {
 	Addr string `toml:"addr"`
 }
 
+type sql struct {
+	User       string `toml:"user"`
+	Password   string `toml:"password"`
+	Addr       string `toml:"addr"`
+	DB         string `toml:"db"`
+	TimeLayout string `toml:"time_layout"`
+}
+
 func InitConfig(runmode string) error {
 	var configFile string
 	if runmode == "" || runmode == "prod" {
