@@ -16,9 +16,10 @@ type apiHandler struct{}
 
 // Routers api routers
 func Routers(e *echo.Group) {
-	e.POST("/create", CreateUser)
-	e.GET("/id/read", ReadUser)
-	e.GET("/name/read", ReadUsers)
-	e.POST("/update", UpdateUser)
-	e.POST("/delete", DeleteUser)
+
+	h := new(apiHandler)
+
+	user := e.Group("", md.UserVertify(token.VerifyUser))
+
+	user.POST("/check", h.Check)
 }
