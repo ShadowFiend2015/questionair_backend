@@ -6,3 +6,7 @@ user = "test"
 password = "mypass"                                                                                                                    
 addr = "mysql:3306"                                                                                                                    
 db = "questionair"
+
+[token]                                                                                                               
+token_expire = 7200                                                                                                   
+salt = "K@#J@)#(U@!J" 

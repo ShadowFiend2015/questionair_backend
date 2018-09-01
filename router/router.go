@@ -1,4 +1,4 @@
-package main
+package router
 
 import (
 	"context"
@@ -17,9 +17,6 @@ import (
 	"questionair_backend/router/api"
 	"questionair_backend/router/user"
 	log "questionair_backend/util/logger"
-	"questionair_backend/util/token"
-
-	md "questionair_backend/middleware"
 )
 
 func RspData(e *echo.Context, data interface{}) {

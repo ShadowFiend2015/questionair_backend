@@ -2,9 +2,12 @@ package api
 
 import (
 	"net/http"
-	"questionair_backend/defines"
 
 	"github.com/labstack/echo"
+
+	"questionair_backend/defines"
+	md "questionair_backend/middleware"
+	"questionair_backend/util/token"
 )
 
 func RspData(e *echo.Context, data interface{}) {
@@ -21,5 +24,5 @@ func Routers(e *echo.Group) {
 
 	user := e.Group("", md.UserVertify(token.VerifyUser))
 
-	user.POST("/check", h.Check)
+	user.POST("/scope/check", h.CheckScopes)
 }

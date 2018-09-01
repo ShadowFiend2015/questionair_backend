@@ -1,10 +1,10 @@
 package conf
 
 import (
+	"fmt"
 	"github.com/BurntSushi/toml"
 	"io/ioutil"
 	"os"
-	"time"
 )
 
 var (
@@ -14,6 +14,8 @@ var (
 
 type conf struct {
 	Server server
+	Sql    sql
+	Token  token
 }
 
 type server struct {
@@ -26,6 +28,11 @@ type sql struct {
 	Addr       string `toml:"addr"`
 	DB         string `toml:"db"`
 	TimeLayout string `toml:"time_layout"`
+}
+
+type token struct {
+	TokenExpire int    `toml:"token_expire"`
+	Salt        string `toml:"salt"`
 }
 
 func InitConfig(runmode string) error {

@@ -9,6 +9,12 @@ var (
 	ComAuthFailed   = errorPair(90004, "鉴权失败")
 	ComBadParam     = errorPair(90005, "请求参数错误")
 	ComNoRight      = errorPair(90006, "没有操作权限")
+
+	SqlReadError   = errorPair(91001, "数据读取错误")
+	SqlInsertError = errorPair(91002, "数据插入错误")
+	SqlUpdateError = errorPair(91003, "数据修改错误")
+	SqlDeleteError = errorPair(91004, "数据删除错误")
+	SqlUpdateNone  = errorPair(91005, "数据修改无效")
 )
 
 var errorMap = make(map[int]string)
