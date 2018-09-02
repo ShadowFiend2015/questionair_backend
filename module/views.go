@@ -18,7 +18,7 @@ func InitSql() error {
 	} else {
 		engine = e
 	}
-	if err := SyncDatabase(new(User), new(Type), new(Scope), new(Link)); err != nil {
+	if err := SyncDatabase(new(User), new(Scope), new(Element), new(Link)); err != nil {
 		return err
 	}
 	return nil
@@ -32,4 +32,16 @@ func readUserByAccount(account string) (User, error) {
 	var user User
 	_, err := engine.Table("user").Where("user.account = ?", account).Get(&user)
 	return user, err
+}
+
+func readScopes() ([]RspScope, error) {
+	var scopes []RspScope
+	err := engine.Table("scope").Asc("scope.id").Find(&scopes)
+	return scopes, err
+}
+
+func readScopesExceptOne(name string) ([]RspScope, error) {
+	var scopes []RspScope
+	err := engine.Table("scope").Where("scope.Name <> ?", name).Asc("scope.id").Find(&scopes)
+	return scopes, err
 }
