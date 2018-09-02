@@ -54,7 +54,7 @@ GET
 | link_code | true | string | 相似构建的编码 |
 | link_name | true | string | 相似构建的名称 |
 | link_full_name | true | string | 相似构建的名称(包含领略，以":"隔开) |
-| status | true | int | 确认状态，0 - 未确认，1 - 单方确认，2 - 双方确认 |
+| status | true | int | 确认状态，0 - 未确认，1 - 已确认 |
 
 返回结果示例
 ----

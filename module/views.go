@@ -45,3 +45,19 @@ func readScopesExceptOne(name string) ([]RspScope, error) {
 	err := engine.Table("scope").Where("scope.Name <> ?", name).Asc("scope.id").Find(&scopes)
 	return scopes, err
 }
+
+func createLink(link *Link) (int64, error) {
+	return engine.Table("link").Insert(link)
+}
+
+func readLinksByScopeFisrt(scopeName string) ([]RspLink, error) {
+	var links []RspLink
+	err := engine.Table("link").Join("INNER", "scope", "link.scope_id_1 = scope.id").Where("scope.name = ?", scopeName).Find(&links)
+	return links, err
+}
+
+func readLinksByScopeSecond(scopeName string) ([]RspLink, error) {
+	var links []RspLink
+	err := engine.Table("link").Join("INNER", "scope", "link.scope_id_2 = scope.id").Where("scope.name = ?", scopeName).Find(&links)
+	return links, err
+}
