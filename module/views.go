@@ -34,6 +34,12 @@ func readUserByAccount(account string) (User, error) {
 	return user, err
 }
 
+func readScopeByName(name string) (RspScope, error) {
+	var scope RspScope
+	_, err := engine.Table("scope").Where("name = ?", name).Get(&scope)
+	return scope, err
+}
+
 func readScopes() ([]RspScope, error) {
 	var scopes []RspScope
 	err := engine.Table("scope").Asc("scope.id").Find(&scopes)
@@ -51,15 +57,15 @@ func createLink(link *Link) error {
 	return err
 }
 
-func readLinksByScopeFisrt(scopeName string) ([]RspLink, error) {
+func readLinksByScopeFisrt(scopeId int64) ([]RspLink, error) {
 	var links []RspLink
-	err := engine.Table("link").Join("INNER", "scope", "link.scope_id_1 = scope.id").Where("scope.name = ?", scopeName).Find(&links)
+	err := engine.Table("link").Where("link.scope_id_1 = ?", scopeId).Join("INNER", "element", "link.element_code_1 = element.code").Join("INNER", "element", "link.element_code_2 = element.code").Find(&links)
 	return links, err
 }
 
-func readLinksByScopeSecond(scopeName string) ([]RspLink, error) {
+func readLinksByScopeSecond(scopeId int64) ([]RspLink, error) {
 	var links []RspLink
-	err := engine.Table("link").Join("INNER", "scope", "link.scope_id_2 = scope.id").Where("scope.name = ?", scopeName).Find(&links)
+	err := engine.Table("link").Where("link.scope_id_2 = ?", scopeId).Join("INNER", "element", "link.element_code_1 = element.code").Join("INNER", "element", "link.element_code_2 = element.code").Find(&links)
 	return links, err
 }
 

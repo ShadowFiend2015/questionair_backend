@@ -67,16 +67,19 @@ type Link struct {
 }
 
 type RspLink struct {
-	Link            `xorm:"extends"`
-	LinkElementName string `xorm:"name"`
-	LinkScopeName   string `xorm:"name"`
+	Link             `xorm:"extends"`
+	LinkElementName1 string `xorm:"name"`
+	LinkElementCode1 string `xorm:"code"`
+	LinkElementName2 string `xorm:"name"`
+	LinkElementCode2 string `xorm:"code"`
 }
 
 type RspLinkSelf struct {
-	Code         string `json:"code"`
+	Id           int64  `json:"id"`
 	Name         string `json:"name"`
-	LinkCode     string `json:"link_code"`
+	Code         string `json:"code"`
 	LinkName     string `json:"link_name"`
+	LinkCode     string `json:"link_code"`
 	LinkFullName string `json:"link_full_name"`
 	Status       int    `json:"status"`
 }

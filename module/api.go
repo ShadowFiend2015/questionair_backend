@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"io"
+	"sort"
 
 	"questionair_backend/defines"
 	log "questionair_backend/util/logger"
@@ -43,7 +44,7 @@ func ReadScopes() (RspData, error) {
 	}
 	rsp.Total = len(scopes)
 	for _, scope := range scopes {
-		rsp.Data = append(rsp.Data, link)
+		rsp.Data = append(rsp.Data, scope)
 	}
 	return rsp, nil
 }
@@ -59,12 +60,12 @@ func ReadScopesExceptOne(name string) (RspData, error) {
 	}
 	rsp.Total = len(scopes)
 	for _, scope := range scopes {
-		rsp.Data = append(rsp.Data, link)
+		rsp.Data = append(rsp.Data, scope)
 	}
 	return rsp, nil
 }
 
-func CreateLink(link *Link) (int64, error) {
+func CreateLink(link *Link) (RspLinkId, error) {
 	var rsp RspLinkId
 	if link.ScopeId1 >= link.ScopeId2 {
 		log.Logger().Errorf("CreateLink: link scope_id_1[%d] >= scope_id_2[%d]", link.ScopeId1, link.ScopeId2)
@@ -85,10 +86,82 @@ func CreateLink(link *Link) (int64, error) {
 		log.Logger().Errorf("CreateLink: %+v", err)
 		return rsp, defines.SqlInsertError
 	}
-	rsp.Id = u.Id
+	rsp.Id = link.Id
 	return rsp, nil
 }
 
 func ReadLinksByScope(scopeName string) (RspData, error) {
+	rsp := RspData{
+		Data: make([]interface{}, 0),
+	}
+	scopes, err := readScopes()
+	if err != nil {
+		log.Logger().Errorf("ReadLinksByScope: read scopes error - %+v", err)
+		return rsp, defines.SqlInsertError
+	}
+	scopeMap := make(map[int64]RspScope)
+	for _, scope := range scopes {
+		scopeMap[scope.Id] = scope
+	}
+
+	scope, err := readScopeByName(scopeName)
+	if err != nil {
+		log.Logger().Errorf("ReadLinksByScope: %+v", err)
+		return rsp, defines.SqlInsertError
+	}
+	if scope.Id == 0 {
+		log.Logger().Errorf("ReadLinksByScope: no scope[%s]", scopeName)
+		return rsp, defines.ComBadParam
+
+	}
+	links1, err := readLinksByScopeFisrt(scope.Id)
+	if err != nil {
+		log.Logger().Errorf("ReadLinksByScope: read scope at first error - %v", err)
+		return rsp, defines.SqlReadError
+	}
+	links2, err := readLinksByScopeSecond(scope.Id)
+	if err != nil {
+		log.Logger().Errorf("ReadLinksByScope: read scope at second error - %v", err)
+		return rsp, defines.SqlReadError
+	}
+	var links []RspLinkSelf
+	for _, l := range links1 {
+		scopeName, ok := scopeMap[l.ScopeId1]
+		if !ok {
+			log.Logger().Errorf("ReadLinksByScope: no scope1[%d] in link[%v]", l.ScopeId1, l)
+			continue
+		}
+		links = append(links, RspLinkSelf{
+			Id:           l.Id,
+			Name:         l.LinkElementName1,
+			Code:         l.LinkElementCode1,
+			LinkName:     l.LinkElementName2,
+			LinkCode:     l.LinkElementCode2,
+			LinkFullName: fmt.Sprintf("%s:%s", scopeName, l.LinkElementName2),
+			Status:       l.Status & (1 << 1),
+		})
+	}
+	for _, l := range links2 {
+		scopeName, ok := scopeMap[l.ScopeId2]
+		if !ok {
+			log.Logger().Errorf("ReadLinksByScope: no scope2[%d] in link[%v]", l.ScopeId2, l)
+			continue
+		}
+		links = append(links, RspLinkSelf{
+			Id:           l.Id,
+			Name:         l.LinkElementName2,
+			Code:         l.LinkElementCode2,
+			LinkName:     l.LinkElementName1,
+			LinkCode:     l.LinkElementCode1,
+			LinkFullName: fmt.Sprintf("%s:%s", scopeName, l.LinkElementName1),
+			Status:       l.Status & (1),
+		})
+	}
+	sort.Slice(links, func(i, j int) bool { return links[i].Code < links[j].Code })
+	rsp.Total = len(links)
+	for _, link := range links {
+		rsp.Data = append(rsp.Data, link)
+	}
+	return rsp, nil
 
 }
