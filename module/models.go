@@ -55,6 +55,8 @@ type RspElement struct {
 	Code    string `json:"scope_code" xorm:"code"`
 }
 
+// ScopeId1 < ScopeId2, ElementCode1 < ElementCode2
+// status: 0 - no confirm, 1 - element_code_1 confirmed, 2 - element_code_2 confirmed, 3 - both confirmed
 type Link struct {
 	Id           int64  `json:"id" form:"id" query:"id" validate:"eq=0"`
 	ScopeId1     int64  `json:"scope_id_1" form:"scope_id_1" query:"scope_id_1" validate:"required" xorm:"notnull"`
@@ -65,5 +67,20 @@ type Link struct {
 }
 
 type RspLink struct {
-	Link `xorm:"extends"`
+	Link            `xorm:"extends"`
+	LinkElementName string `xorm:"name"`
+	LinkScopeName   string `xorm:"name"`
+}
+
+type RspLinkSelf struct {
+	Code         string `json:"code"`
+	Name         string `json:"name"`
+	LinkCode     string `json:"link_code"`
+	LinkName     string `json:"link_name"`
+	LinkFullName string `json:"link_full_name"`
+	Status       int    `json:"status"`
+}
+
+type RspLinkId struct {
+	Id int64 `json:"id"`
 }

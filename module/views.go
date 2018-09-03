@@ -46,8 +46,9 @@ func readScopesExceptOne(name string) ([]RspScope, error) {
 	return scopes, err
 }
 
-func createLink(link *Link) (int64, error) {
-	return engine.Table("link").Insert(link)
+func createLink(link *Link) error {
+	_, err := engine.Table("link").Insert(link)
+	return err
 }
 
 func readLinksByScopeFisrt(scopeName string) ([]RspLink, error) {
@@ -60,4 +61,15 @@ func readLinksByScopeSecond(scopeName string) ([]RspLink, error) {
 	var links []RspLink
 	err := engine.Table("link").Join("INNER", "scope", "link.scope_id_2 = scope.id").Where("scope.name = ?", scopeName).Find(&links)
 	return links, err
+}
+
+func countLinkByCode(code1, code2 string) (int, error) {
+	var link Link
+	total, err := engine.Table("link").Where("link.element_code_1 = ? and link.element_code_2 = ?", code1, code2).Count(&link)
+	return int(total), err
+}
+
+func updateLink(link *Link) error {
+	_, err := engine.Table("link").Where("link.id = ?", link.Id).Update(link)
+	return err
 }
