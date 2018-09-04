@@ -138,7 +138,7 @@ func ReadLinksByScope(scopeName string) (RspData, error) {
 			LinkName:     l.LinkElementName2,
 			LinkCode:     l.LinkElementCode2,
 			LinkFullName: fmt.Sprintf("%s:%s", scopeName, l.LinkElementName2),
-			Status:       l.Status & (1 << 1),
+			Status:       l.Status & 1,
 		})
 	}
 	for _, l := range links2 {
@@ -154,7 +154,7 @@ func ReadLinksByScope(scopeName string) (RspData, error) {
 			LinkName:     l.LinkElementName1,
 			LinkCode:     l.LinkElementCode1,
 			LinkFullName: fmt.Sprintf("%s:%s", scopeName, l.LinkElementName1),
-			Status:       l.Status & (1),
+			Status:       (l.Status & 2) >> 1,
 		})
 	}
 	sort.Slice(links, func(i, j int) bool { return links[i].Code < links[j].Code })
@@ -163,5 +163,28 @@ func ReadLinksByScope(scopeName string) (RspData, error) {
 		rsp.Data = append(rsp.Data, link)
 	}
 	return rsp, nil
+
+}
+
+func UpdateLink(linkId int64, scopeName string, confirm int) error {
+	link, err := readLinkById(linkId)
+	if err != nil {
+		log.Logger().Errorf("UpdateLink: read link by id[%d] error - %v", linkId, err)
+		return rsp, defines.SqlReadError
+	} else if link.Id == 0 {
+		log.Logger().Errorf("UpdateLink: no link[%d] in mysql", linkId)
+		return rsp, defines.SqlNoData
+	}
+	scope, err := readScopeByName(scopeName)
+	if err != nil {
+		log.Logger().Errorf("UpdateLink: read scope by name[%s] error - %+v", scopeName, err)
+		return rsp, defines.SqlReadError
+	} else if scope.Id == 0 {
+		log.Logger().Errorf("UpdateLink: no scope[%s] in mysql", scopeName)
+		return rsp, defines.SqlNoData
+	}
+	if link.ScopeId1 == scope.Id {
+
+	}
 
 }

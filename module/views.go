@@ -57,6 +57,12 @@ func createLink(link *Link) error {
 	return err
 }
 
+func readLinkById(id int64) (Link, error) {
+	var link Link
+	_, err := engine.Table("link").Id(id).Get(&link)
+	return link, err
+}
+
 func readLinksByScopeFisrt(scopeId int64) ([]RspLink, error) {
 	var links []RspLink
 	err := engine.Table("link").Where("link.scope_id_1 = ?", scopeId).Join("INNER", "element", "link.element_code_1 = element.code").Join("INNER", "element", "link.element_code_2 = element.code").Find(&links)
@@ -76,6 +82,11 @@ func countLinkByCode(code1, code2 string) (int, error) {
 }
 
 func updateLink(link *Link) error {
-	_, err := engine.Table("link").Where("link.id = ?", link.Id).Update(link)
+	_, err := engine.Table("link").Id(link.Id).Update(link)
+	return err
+}
+
+func updateLinkMust(link *Link) error {
+	_, err := engine.MustCols("link").Id(link.Id).Update(link)
 	return err
 }

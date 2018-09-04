@@ -17,6 +17,7 @@ var (
 	SqlUpdateError = errorPair(91003, "数据修改错误")
 	SqlDeleteError = errorPair(91004, "数据删除错误")
 	SqlUpdateNone  = errorPair(91005, "数据修改无效")
+	SqlNoData      = errorPair(91006, "无此数据")
 )
 
 var errorMap = make(map[int]string)
