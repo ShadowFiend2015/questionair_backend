@@ -48,8 +48,14 @@ func readScopes() ([]RspScope, error) {
 
 func readScopesExceptOne(name string) ([]RspScope, error) {
 	var scopes []RspScope
-	err := engine.Table("scope").Where("scope.Name <> ?", name).Asc("scope.id").Find(&scopes)
+	err := engine.Table("scope").Where("scope.name <> ?", name).Asc("scope.id").Find(&scopes)
 	return scopes, err
+}
+
+func readElementByName(name string, scopeId int64) (Element, error) {
+	var element Element
+	_, err := engine.Table("element").Where("element.scope_id = ? and element.name = ?", scopeId, name).Get(&element)
+	return element, err
 }
 
 func createLink(link *Link) error {
