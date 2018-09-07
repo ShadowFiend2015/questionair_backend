@@ -86,9 +86,118 @@ POST
 > `code` 与 `msg` 字段只代表请求方式的正确与否，是否成功登录要看 `body` 里的 `pass` 字段。
 
 
+## 建筑类型
+
+### 一、查询(所有)
+---
+/api/scope/read
+
+支持格式
+---
+QueryString
+
+HTTP Method
+---
+GET
+
+请求参数
+---
+| 字段 | 必选 | 类型 | 说明 |
+| ----- | ---- | ---- | ---- |
+| token | true | string | 用户登陆时产生的 token，放在 header 里 |
+
+返回字段
+---
+| 字段 | 必选 | 类型 | 说明 |
+| ----- | ---- | ---- | ---- |
+| id | true | int | 类型 id |
+| name | true | string | 类型名称 |
+| code | true | string | 类型编码 |
+
+返回结果示例
+----
+```
+
+```
+
+### 二、查询(所有除了给定的类型)
+---
+/api/scope/other/read
+
+支持格式
+---
+QueryString
+
+HTTP Method
+---
+GET
+
+请求参数
+---
+| 字段 | 必选 | 类型 | 说明 |
+| ----- | ---- | ---- | ---- |
+| token | true | string | 用户登陆时产生的 token，放在 header 里 |
+| scope_name | true | string | 用户登陆时产生的 token，放在 header 里 |
+
+返回字段
+---
+| 字段 | 必选 | 类型 | 说明 |
+| ----- | ---- | ---- | ---- |
+| id | true | int | 类型 id |
+| name | true | string | 类型名称 |
+| code | true | string | 类型编码 |
+
+返回结果示例
+----
+```
+
+```
+
+
 ## 关联数据
 
-### 一、查询关联数据(根据领域查询所有)
+### 一、创建关联数据
+---
+/api/link/create
+
+支持格式
+---
+QueryString
+
+HTTP Method
+---
+GET
+
+请求参数
+---
+| 字段 | 必选 | 类型 | 说明 |
+| ----- | ---- | ---- | ---- |
+| token | true | string | 用户登陆时产生的 token，放在 header 里 |
+| scope_name_1 | true | string | 领域中文名称1 |
+| scope_name_2 | true | string | 领域中文名称2 |
+| element_name_1 | true | string | 构件中文名称1 |
+| element_name_2 | true | string | 构件中文名称2 |
+| host_scope | true | string | 主体领域中文名称 |
+
+返回字段
+---
+| 字段 | 必选 | 类型 | 说明 |
+| ----- | ---- | ---- | ---- |
+| id | true | int | 关联数据 id |
+| code | true | string | 构建编码 |
+| name | true | string | 构建名称 |
+| link_code | true | string | 相似构建的编码 |
+| link_name | true | string | 相似构建的名称 |
+| link_full_name | true | string | 相似构建的名称(包含领略，以":"隔开) |
+| status | true | int | 确认状态，0 - 未确认，1 - 已确认 |
+
+返回结果示例
+----
+```
+
+```
+
+### 二、查询关联数据(根据领域查询所有)
 ---
 /api/link/scope/read
 
@@ -113,12 +222,44 @@ GET
 ---
 | 字段 | 必选 | 类型 | 说明 |
 | ----- | ---- | ---- | ---- |
+| id | true | int | 关联数据 id |
 | code | true | string | 构建编码 |
 | name | true | string | 构建名称 |
 | link_code | true | string | 相似构建的编码 |
 | link_name | true | string | 相似构建的名称 |
 | link_full_name | true | string | 相似构建的名称(包含领略，以":"隔开) |
 | status | true | int | 确认状态，0 - 未确认，1 - 已确认 |
+
+返回结果示例
+----
+```
+
+```
+
+### 三、确认关联数据
+---
+/api/link/confirm
+
+支持格式
+---
+QueryString
+
+HTTP Method
+---
+GET
+
+请求参数
+---
+| 字段 | 必选 | 类型 | 说明 |
+| ----- | ---- | ---- | ---- |
+| token | true | string | 用户登陆时产生的 token，放在 header 里 |
+| id | true | int | 关联数据 id |
+| host_scope | true | string | 主体领域中文名称 |
+| agree | true | bool | 确认关联数据是否正确，true - 正确，false - 错误 |
+
+返回字段
+---
+无
 
 返回结果示例
 ----

@@ -1,5 +1,6 @@
 [server]
 addr = ":50000"
+loglevel = 3
 
 [sql]                                                                                                                                  
 user = "test"                                                                                                                         
