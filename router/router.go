@@ -71,6 +71,10 @@ func RunServer(runmode string) {
 		log.Logger().Error("init mysql err")
 		panic(err)
 	}
+	if err := module.InitScopeMap(); err != nil {
+		log.Logger().Error("init scope_map err")
+		panic(err)
+	}
 
 	srv := echo.New()
 	srv.Use(middleware.BodyLimit("20M"))

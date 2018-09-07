@@ -24,5 +24,6 @@ func Routers(e *echo.Group) {
 
 	user := e.Group("", md.UserVertify(token.VerifyUser))
 
-	user.POST("/scope/check", h.CheckScopes)
+	user.GET("/scope/read", h.ReadScopes)
+	user.GET("/scope/other/read", h.ReadScopesExceptOne)
 }

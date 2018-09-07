@@ -15,16 +15,17 @@ var (
 	scopeNameMap map[string]RspScope
 )
 
-func InitScopeMap() {
+func InitScopeMap() error {
 	scopes, err := readScopes()
 	if err != nil {
 		log.Logger().Errorf("InitScopeMap: read scopes error - %+v", err)
-		return
+		return err
 	}
 	for _, scope := range scopes {
 		scopeIdMap[scope.Id] = scope
 		scopeNameMap[scope.Name] = scope
 	}
+	return nil
 }
 
 func CheckUser(account, passMD5 string) (RspUserCheck, error) {
@@ -38,13 +39,13 @@ func CheckUser(account, passMD5 string) (RspUserCheck, error) {
 	}
 	if user.Id == 0 {
 		log.Logger().Errorf("CheckUser: account [%s] not found in the database", account)
-		return rsp, nil
+		return rsp, defines.ComLoginFailed
 	}
 	h := md5.New()
 	io.WriteString(h, user.Password)
 	if passMD5 != fmt.Sprintf("%x", h.Sum(nil)) {
 		log.Logger().Errorf("CheckUser: account [%s] can't match password(md5) [%s]", account, passMD5)
-		return rsp, nil
+		return rsp, defines.ComLoginFailed
 	}
 	rsp.Pass = true
 	return rsp, nil

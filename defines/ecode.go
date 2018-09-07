@@ -11,6 +11,7 @@ var (
 	ComNoRight      = errorPair(90006, "没有操作权限")
 	ComLimit        = errorPair(90007, "超过限制")
 	ComDuplicate    = errorPair(90008, "重复操作")
+	ComLoginFailed  = errorPair(90009, "登录失败")
 
 	SqlReadError   = errorPair(91001, "数据读取错误")
 	SqlInsertError = errorPair(91002, "数据插入错误")

@@ -2,9 +2,13 @@ package conf
 
 import (
 	"fmt"
-	"github.com/BurntSushi/toml"
 	"io/ioutil"
 	"os"
+
+	"github.com/BurntSushi/toml"
+	l "github.com/labstack/gommon/log"
+
+	log "questionair_backend/util/logger"
 )
 
 var (
@@ -19,7 +23,8 @@ type conf struct {
 }
 
 type server struct {
-	Addr string `toml:"addr"`
+	Addr     string `toml:"addr"`
+	LogLevel int    `toml:"loglevel"`
 }
 
 type sql struct {
@@ -56,5 +61,6 @@ func InitConfig(runmode string) error {
 	if err != nil {
 		return err
 	}
+	log.Logger().SetLevel(l.Lvl(Conf.Server.LogLevel))
 	return nil
 }
