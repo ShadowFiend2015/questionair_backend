@@ -22,6 +22,50 @@ http://{IP}:{PORT}/api/scope/check
 详细接口信息如下：
 
 
+## 用户
+
+### 一、用户登录
+---
+/user/login
+
+支持格式
+---
+JSON
+
+HTTP Method
+---
+POST
+
+请求参数
+---
+| 字段 | 必选 | 类型 | 说明 |
+| ----- | ---- | ---- | ---- |
+| account | true | string | 用户帐号 |
+| password | true | string | 用户密码 |
+
+返回字段
+---
+| 字段 | 必返 | 类型 | 说明 |
+| ----- | ---- | ---- | ---- |
+| pass | true | bool | 是否成功，true/false |
+| token | true | string | 登录成功返回的用户 token |
+
+返回结果示例
+----
+```
+{
+    "code": 0,
+    "msg": "success",
+    "body": {
+        "pass": true,
+        "token": "test_user_token"
+    }
+}
+```
+*注意*
+> `code` 与 `msg` 字段只代表请求方式的正确与否，是否成功登录要看 `body` 里的 `pass` 字段。
+
+
 ## 关联数据
 
 ### 一、查询关联数据(根据领域查询所有)
