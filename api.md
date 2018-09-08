@@ -166,7 +166,7 @@ QueryString
 
 HTTP Method
 ---
-GET
+POST
 
 请求参数
 ---
@@ -246,7 +246,7 @@ QueryString
 
 HTTP Method
 ---
-GET
+POST
 
 请求参数
 ---
