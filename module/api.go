@@ -48,6 +48,7 @@ func CheckUser(account, passMD5 string) (RspUserCheck, error) {
 		return rsp, defines.ComLoginFailed
 	}
 	rsp.Pass = true
+	rsp.UserId = user.Id
 	return rsp, nil
 }
 
