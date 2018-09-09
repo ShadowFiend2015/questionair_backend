@@ -1,0 +1,25 @@
+version: '2'
+  
+services:
+    mysql:
+        restart: always
+        image: mysql:5.7
+        ports:
+            - "3306:3306"
+        environment:
+            - MYSQL_ROOT_PASSWORD=mypass
+            - MYSQL_DATABASE=questionair
+        volumes:
+            - ./mysql/data:/var/lib/mysql
+            - ./mysql/config/my.cnf:/etc/my.cnf
+            - ./mysql/init:/docker-entrypoint-initdb.d/
+    questionair:
+        restart: always
+        image: questionair:1.0.0
+        ports:
+            - "50000:50000"
+        links:
+            - mysql:mysql
+        volumes:
+            - ./questionair/conf:/questionair/conf
+~  

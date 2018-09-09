@@ -3,7 +3,7 @@ addr = ":50000"
 loglevel = 3
 
 [sql]                                                                                                                                  
-user = "admin"                                                                                                                         
+user = "test"                                                                                                                         
 password = "mypass"                                                                                                                    
 addr = "mysql:3306"                                                                                                                    
 db = "questionair"
