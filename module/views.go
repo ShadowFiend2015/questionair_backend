@@ -71,19 +71,19 @@ func readLinkById(id int64) (Link, error) {
 
 func readLinksByScopeFisrt(scopeId int64) ([]RspLink, error) {
 	var links []RspLink
-	err := engine.Table("link").Where("link.scope_id_1 = ?", scopeId).Join("INNER", "element", "link.element_code_1 = element.code").Join("INNER", "element", "link.element_code_2 = element.code").Find(&links)
+	err := engine.Table("link").Where("link.scope_id1 = ?", scopeId).Join("INNER", "element", "link.element_code1 = element.code").Join("INNER", "element", "link.element_code2 = element.code").Find(&links)
 	return links, err
 }
 
 func readLinksByScopeSecond(scopeId int64) ([]RspLink, error) {
 	var links []RspLink
-	err := engine.Table("link").Where("link.scope_id_2 = ?", scopeId).Join("INNER", "element", "link.element_code_1 = element.code").Join("INNER", "element", "link.element_code_2 = element.code").Find(&links)
+	err := engine.Table("link").Where("link.scope_id2 = ?", scopeId).Join("INNER", "element", "link.element_code1 = element.code").Join("INNER", "element", "link.element_code2 = element.code").Find(&links)
 	return links, err
 }
 
 func countLinkByCode(code1, code2 string) (int, error) {
 	var link Link
-	total, err := engine.Table("link").Where("link.element_code_1 = ? and link.element_code_2 = ?", code1, code2).Count(&link)
+	total, err := engine.Table("link").Where("link.element_code1 = ? and link.element_code2 = ?", code1, code2).Count(&link)
 	return int(total), err
 }
 
