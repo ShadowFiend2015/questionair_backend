@@ -28,6 +28,6 @@ func Routers(e *echo.Group) {
 	user.GET("/scope/other/read", h.ReadScopesExceptOne)
 
 	user.POST("/link/create", h.CreateLink)
-	user.GET("/link/scope/read", h.ReadScopes)
+	user.GET("/link/scope/read", h.ReadLinksByScope)
 	user.POST("/link/confirm", h.ConfirmLink)
 }

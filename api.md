@@ -117,7 +117,60 @@ GET
 返回结果示例
 ----
 ```
-
+{
+    "code": 0,
+    "msg": "success",
+    "body": {
+        "total": 9,
+        "data": [
+            {
+                "id": 1,
+                "name": "电网工程",
+                "code": "DW"
+            },
+            {
+                "id": 2,
+                "name": "建筑工程",
+                "code": "JZ"
+            },
+            {
+                "id": 3,
+                "name": "铁路工程",
+                "code": "TL"
+            },
+            {
+                "id": 4,
+                "name": "公路工程",
+                "code": "GL"
+            },
+            {
+                "id": 5,
+                "name": "水利工程",
+                "code": "SL"
+            },
+            {
+                "id": 6,
+                "name": "民航工程",
+                "code": "MH"
+            },
+            {
+                "id": 7,
+                "name": "石油管道",
+                "code": "YQ"
+            },
+            {
+                "id": 8,
+                "name": "城市轨道",
+                "code": "GD"
+            },
+            {
+                "id": 9,
+                "name": "机械制造",
+                "code": "JX"
+            }
+        ]
+    }
+}
 ```
 
 ### 二、查询(所有除了给定的类型)
@@ -149,9 +202,7 @@ GET
 
 返回结果示例
 ----
-```
-
-```
+同 `一、查询`
 
 
 ## 关联数据
@@ -214,7 +265,7 @@ GET
 | 字段 | 必选 | 类型 | 说明 |
 | ----- | ---- | ---- | ---- |
 | token | true | string | 用户登陆时产生的 token，放在 header 里 |
-| scope | true | string | 领域中文名称 |
+| scope_name | true | string | 领域中文名称 |
 | order | false | string | "asc" 或 "desc"，默认为 asc |
 | order_by | false | string | 排序依据，选项："code"，默认为 code |
 
@@ -255,7 +306,7 @@ POST
 | token | true | string | 用户登陆时产生的 token，放在 header 里 |
 | id | true | int | 关联数据 id |
 | host_scope | true | string | 主体领域中文名称 |
-| agree | true | bool | 确认关联数据是否正确，true - 正确，false - 错误 |
+| agree | false | bool | 确认关联数据是否正确，true - 正确，false - 错误，默认为错误 |
 
 返回字段
 ---

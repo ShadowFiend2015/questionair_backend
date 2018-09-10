@@ -71,13 +71,13 @@ func readLinkById(id int64) (Link, error) {
 
 func readLinksByScopeFisrt(scopeId int64) ([]RspLink, error) {
 	var links []RspLink
-	err := engine.Table("link").Where("link.scope_id1 = ?", scopeId).Join("INNER", "element", "link.element_code1 = element.code").Join("INNER", "element", "link.element_code2 = element.code").Find(&links)
+	err := engine.Table("link").Where("link.scope_id1 = ?", scopeId).Join("INNER", []string{"element", "element1"}, "link.element_code1 = element1.code").Join("INNER", []string{"element", "element2"}, "link.element_code2 = element2.code").Find(&links)
 	return links, err
 }
 
 func readLinksByScopeSecond(scopeId int64) ([]RspLink, error) {
 	var links []RspLink
-	err := engine.Table("link").Where("link.scope_id2 = ?", scopeId).Join("INNER", "element", "link.element_code1 = element.code").Join("INNER", "element", "link.element_code2 = element.code").Find(&links)
+	err := engine.Table("link").Where("link.scope_id2 = ?", scopeId).Join("INNER", []string{"element", "element1"}, "link.element_code1 = element1.code").Join("INNER", []string{"element", "element2"}, "link.element_code2 = element2.code").Find(&links)
 	return links, err
 }
 
@@ -92,7 +92,7 @@ func updateLink(link *Link) error {
 	return err
 }
 
-func updateLinkMust(link *Link) error {
-	_, err := engine.MustCols("link").Id(link.Id).Update(link)
+func updateLinkStatus(link *Link) error {
+	_, err := engine.Table("link").Cols("status").Id(link.Id).Update(link)
 	return err
 }

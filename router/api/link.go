@@ -18,8 +18,7 @@ type ReqLink struct {
 type ReqConfirmLink struct {
 	Id        int64  `json:"id" form:"id" query:"id" validate:"required"`
 	HostScope string `json:"host_scope" form:"host_scope" query:"host_scope" validate:"required"`
-
-	Agree bool `json:"agree" form:"agree" query:"agree" validate:"required"`
+	Agree     bool   `json:"agree" form:"agree" query:"agree"`
 }
 
 func (h *apiHandler) CreateLink(e echo.Context) error {
@@ -28,6 +27,7 @@ func (h *apiHandler) CreateLink(e echo.Context) error {
 		log.Logger().Errorf("CreateLink: %+v", err)
 		return defines.ComBadParam
 	}
+	req.HostScope = req.ScopeName1
 	if err := e.Validate(req); err != nil {
 		log.Logger().Errorf("CreateLink: %+v", err)
 		return defines.ComBadParam

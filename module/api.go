@@ -11,8 +11,8 @@ import (
 )
 
 var (
-	scopeIdMap   map[int64]RspScope
-	scopeNameMap map[string]RspScope
+	scopeIdMap   = make(map[int64]RspScope)
+	scopeNameMap = make(map[string]RspScope)
 )
 
 func InitScopeMap() error {
@@ -110,6 +110,10 @@ func CreateLink(scopeName1, scopeName2, elementName1, elementName2, hostScope st
 	if err != nil {
 		log.Logger().Errorf("CreateLink: read element2 by name[%s] scope[%d] error - ", elementName2, scope2.Id, err)
 		return rsp, defines.SqlReadError
+	}
+	if element1.Id == 0 || element2.Id == 0 {
+		log.Logger().Errorf("CreateLink:  element1 scope[%d] name[%s] id[%d] element2 scope[%d] name[%s] id[%d]", scope1.Id, elementName1, element1.Id, scope2.Id, elementName2, element2.Id)
+		return rsp, defines.ComBadParam
 	}
 	status := 0
 	if hostScope == scopeName1 {
@@ -236,7 +240,7 @@ func UpdateLink(linkId int64, hostScope string, confirm int) error {
 	} else if link.ScopeId2 == scope.Id {
 		link.Status = (link.Status & 1) + confirm<<1
 	}
-	if err := updateLinkMust(&link); err != nil {
+	if err := updateLinkStatus(&link); err != nil {
 		log.Logger().Errorf("UpdateLink: update link[%d] status error - %v", linkId, err)
 		return defines.SqlUpdateError
 	}
