@@ -81,6 +81,12 @@ func readLinksByScopeSecond(scopeId int64) ([]RspLink, error) {
 	return links, err
 }
 
+func readLinksAll() ([]Link, error) {
+	var links []Link
+	err := engine.Table("link").Find(&links)
+	return links, err
+}
+
 func countLinkByCode(code1, code2 string) (int, error) {
 	var link Link
 	total, err := engine.Table("link").Where("link.element_code1 = ? and link.element_code2 = ?", code1, code2).Count(&link)
