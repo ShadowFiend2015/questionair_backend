@@ -81,9 +81,9 @@ func readLinksByScopeSecond(scopeId int64) ([]RspLink, error) {
 	return links, err
 }
 
-func readLinksAll() ([]Link, error) {
+func readLinksConfirmed() ([]Link, error) {
 	var links []Link
-	err := engine.Table("link").Find(&links)
+	err := engine.Table("link").Where("link.status <> 0").Find(&links)
 	return links, err
 }
 

@@ -84,6 +84,11 @@ type RspLinkSelf struct {
 	Status       int    `json:"status"`
 }
 
+type RspLinkDownload struct {
+	Element1 string `json:"a"`
+	Element2 string `json:"b"`
+}
+
 type RspLinkId struct {
 	Id int64 `json:"id"`
 }

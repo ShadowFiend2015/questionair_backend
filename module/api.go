@@ -221,6 +221,22 @@ func ReadLinksByScope(scopeName string) (RspData, error) {
 
 }
 
+func ReadLinksConfirmed() ([]RspLinkDownload, error) {
+	var rsp []RspLinkDownload
+	links, err := readLinksConfirmed()
+	if err != nil {
+		log.Logger().Errorf("ReadLinksConfirmed: read links error - %v", err)
+		return rsp, defines.SqlReadError
+	}
+	for _, link := range links {
+		rsp = append(rsp, RspLinkDownload{
+			Element1: fmt.Sprintf("%s-%s", scopeIdMap[link.ScopeId1].Code, link.ElementCode1),
+			Element2: fmt.Sprintf("%s-%s", scopeIdMap[link.ScopeId2].Code, link.ElementCode2),
+		})
+	}
+	return rsp, nil
+}
+
 func UpdateLink(linkId int64, hostScope string, confirm int) error {
 	link, err := readLinkById(linkId)
 	if err != nil {
