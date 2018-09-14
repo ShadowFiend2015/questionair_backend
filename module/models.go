@@ -55,6 +55,13 @@ type RspElement struct {
 	Code    string `json:"scope_code" xorm:"code"`
 }
 
+type RspElementLinked struct {
+	ScopeId     int64  `json:"-"`
+	ScopeCode   string `json:"scope"`
+	ElementCode string `json:"code"`
+	ElementName string `json:"name"`
+}
+
 // ScopeId1 < ScopeId2
 // status: 0 - no confirm, 1 - element_code_1 confirmed, 2 - element_code_2 confirmed, 3 - both confirmed
 type Link struct {

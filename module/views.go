@@ -81,6 +81,12 @@ func readLinksByScopeSecond(scopeId int64) ([]RspLink, error) {
 	return links, err
 }
 
+func readLinksElementConfirmed() ([]RspLink, error) {
+	var links []RspLink
+	err := engine.Table("link").Where("link.status <> 0").Join("INNER", []string{"element", "element1"}, "link.element_code1 = element1.code").Join("INNER", []string{"element", "element2"}, "link.element_code2 = element2.code").Find(&links)
+	return links, err
+}
+
 func readLinksConfirmed() ([]Link, error) {
 	var links []Link
 	err := engine.Table("link").Where("link.status <> 0").Find(&links)

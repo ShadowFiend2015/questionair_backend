@@ -84,6 +84,45 @@ func ReadScopesExceptOne(name string) (RspData, error) {
 	return rsp, nil
 }
 
+func ReadElementsByConfirmedLink() ([]RspElementLinked, error) {
+	var rsp []RspElementLinked
+	elementMap := make(map[string]RspElementLinked)
+	links, err := readLinksElementConfirmed()
+	if err != nil {
+		log.Logger().Errorf("ReadElementsByConfirmedLink: read links error - %v", err)
+		return rsp, defines.SqlReadError
+	}
+	for _, link := range links {
+		if _, ok := elementMap[link.ElementCode1]; !ok {
+			elementMap[link.ElementCode1] = RspElementLinked{
+				ScopeId:     link.ScopeId1,
+				ScopeCode:   scopeIdMap[link.ScopeId1].Code,
+				ElementCode: link.ElementCode1,
+				ElementName: link.LinkElementName1,
+			}
+		}
+		if _, ok := elementMap[link.ElementCode2]; !ok {
+			elementMap[link.ElementCode2] = RspElementLinked{
+				ScopeId:     link.ScopeId2,
+				ScopeCode:   scopeIdMap[link.ScopeId2].Code,
+				ElementCode: link.ElementCode2,
+				ElementName: link.LinkElementName2,
+			}
+		}
+	}
+	for _, element := range elementMap {
+		rsp = append(rsp, element)
+	}
+	sort.Slice(rsp, func(i, j int) bool {
+		if rsp[i].ScopeId == rsp[j].ScopeId {
+			return rsp[i].ElementCode < rsp[j].ElementCode
+		}
+		return rsp[i].ScopeId < rsp[j].ScopeId
+	})
+	return rsp, nil
+
+}
+
 func CreateLink(scopeName1, scopeName2, elementName1, elementName2, hostScope string) (RspLinkSelf, error) {
 	var rsp RspLinkSelf
 	scope1, ok := scopeNameMap[scopeName1]
@@ -189,9 +228,9 @@ func ReadLinksByScope(scopeName string) (RspData, error) {
 		links = append(links, RspLinkSelf{
 			Id:           l.Id,
 			Name:         l.LinkElementName1,
-			Code:         l.LinkElementCode1,
+			Code:         l.ElementCode1,
 			LinkName:     l.LinkElementName2,
-			LinkCode:     l.LinkElementCode2,
+			LinkCode:     l.ElementCode2,
 			LinkFullName: fmt.Sprintf("%s:%s", scope2.Name, l.LinkElementName2),
 			Status:       l.Status & 1,
 		})
@@ -205,9 +244,9 @@ func ReadLinksByScope(scopeName string) (RspData, error) {
 		links = append(links, RspLinkSelf{
 			Id:           l.Id,
 			Name:         l.LinkElementName2,
-			Code:         l.LinkElementCode2,
+			Code:         l.ElementCode2,
 			LinkName:     l.LinkElementName1,
-			LinkCode:     l.LinkElementCode1,
+			LinkCode:     l.ElementCode1,
 			LinkFullName: fmt.Sprintf("%s:%s", scope1.Name, l.LinkElementName1),
 			Status:       (l.Status & 2) >> 1,
 		})
