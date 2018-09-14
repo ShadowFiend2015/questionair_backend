@@ -76,9 +76,7 @@ type Link struct {
 type RspLink struct {
 	Link             `xorm:"extends"`
 	LinkElementName1 string `xorm:"name"`
-	LinkElementCode1 string `xorm:"code"`
 	LinkElementName2 string `xorm:"name"`
-	LinkElementCode2 string `xorm:"code"`
 }
 
 type RspLinkSelf struct {
