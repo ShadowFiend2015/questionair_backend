@@ -30,4 +30,6 @@ func Routers(e *echo.Group) {
 	user.POST("/link/create", h.CreateLink)
 	user.GET("/link/scope/read", h.ReadLinksByScope)
 	user.POST("/link/confirm", h.ConfirmLink)
+
+	user.GET("/download/elements", h.DownloadElementsByConfirmedLink)
 }
