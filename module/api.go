@@ -269,8 +269,8 @@ func ReadLinksConfirmed() ([]RspLinkDownload, error) {
 	}
 	for _, link := range links {
 		rsp = append(rsp, RspLinkDownload{
-			Element1: fmt.Sprintf("%s-%s", scopeIdMap[link.ScopeId1].Code, link.ElementCode1),
-			Element2: fmt.Sprintf("%s-%s", scopeIdMap[link.ScopeId2].Code, link.ElementCode2),
+			Element1: link.ElementCode1,
+			Element2: link.ElementCode2,
 		})
 	}
 	return rsp, nil

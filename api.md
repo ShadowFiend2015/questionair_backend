@@ -317,3 +317,51 @@ POST
 ```
 
 ```
+
+
+## 数据导出
+
+### 一、导出确认结果
+---
+/api/download/links
+
+支持格式
+---
+QueryString
+
+HTTP Method
+---
+GET
+
+请求参数
+---
+| 字段 | 必选 | 类型 | 说明 |
+| ----- | ---- | ---- | ---- |
+| token | true | string | 用户登陆时产生的 token，放在 header 里 |
+
+返回字段
+---
+无
+
+### 二、导出共享层
+---
+/api/download/elements
+
+支持格式
+---
+QueryString
+
+HTTP Method
+---
+GET
+
+请求参数
+---
+| 字段 | 必选 | 类型 | 说明 |
+| ----- | ---- | ---- | ---- |
+| token | true | string | 用户登陆时产生的 token，放在 header 里 |
+
+返回字段
+---
+无
+

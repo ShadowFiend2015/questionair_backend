@@ -31,5 +31,6 @@ func Routers(e *echo.Group) {
 	user.GET("/link/scope/read", h.ReadLinksByScope)
 	user.POST("/link/confirm", h.ConfirmLink)
 
+	user.GET("/download/links", h.DownloadLinkConfirmed)
 	user.GET("/download/elements", h.DownloadElementsByConfirmedLink)
 }
