@@ -52,6 +52,19 @@ func CheckUser(account, passMD5 string) (RspUserCheck, error) {
 	return rsp, nil
 }
 
+func CheckUserDownload(id int64) error {
+	user, err := readUserById(id)
+	if err != nil {
+		log.Logger().Errorf("CheckUserDownload: %+v", err)
+		return defines.SqlReadError
+	}
+	if user.Status != defines.SUPER {
+		log.Logger().Errorf("CheckUserDownload: user[%d] has no right[%d] to download", id, user.Status)
+		return defines.ComNoRight
+	}
+	return nil
+}
+
 func ReadScopes() (RspData, error) {
 	rsp := RspData{
 		Data: make([]interface{}, 0),

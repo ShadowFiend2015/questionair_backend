@@ -11,9 +11,19 @@ import (
 	"questionair_backend/defines"
 	"questionair_backend/module"
 	log "questionair_backend/util/logger"
+	"questionair_backend/util/token"
 )
 
 func (h *apiHandler) DownloadLinkConfirmed(e echo.Context) error {
+	userId, err := token.GetTokenId(e)
+	if err != nil {
+		log.Logger().Errorf("DownloadLinkConfirmed: %+v", err)
+		return err
+	}
+	if err := module.CheckUserDownload(userId); err != nil {
+		log.Logger().Errorf("DownloadLinkConfirmed: check user's right failed - %v", err)
+		return err
+	}
 	elements, err := module.ReadLinksConfirmed()
 	if err != nil {
 		log.Logger().Errorf("DownloadLinkConfirmed: %v", err)
@@ -40,6 +50,16 @@ func (h *apiHandler) DownloadLinkConfirmed(e echo.Context) error {
 }
 
 func (h *apiHandler) DownloadElementsByConfirmedLink(e echo.Context) error {
+	userId, err := token.GetTokenId(e)
+	if err != nil {
+		log.Logger().Errorf("DownloadElementsByConfirmedLink: %+v", err)
+		return err
+	}
+	if err := module.CheckUserDownload(userId); err != nil {
+		log.Logger().Errorf("DownloadElementsByConfirmedLink: check user's right failed - %v", err)
+		return err
+	}
+
 	elements, err := module.ReadElementsByConfirmedLink()
 	if err != nil {
 		log.Logger().Errorf("DownloadElementsByConfirmedLink: %v", err)

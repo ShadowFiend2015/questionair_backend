@@ -34,6 +34,12 @@ func readUserByAccount(account string) (User, error) {
 	return user, err
 }
 
+func readUserById(id int64) (User, error) {
+	var user User
+	_, err := engine.Table("user").Id(id).Get(&user)
+	return user, err
+}
+
 func readScopeByName(name string) (RspScope, error) {
 	var scope RspScope
 	_, err := engine.Table("scope").Where("name = ?", name).Get(&scope)

@@ -23,3 +23,8 @@ func CreateRespMsg(code int, msg string, body interface{}) *Resp {
 func NewSuccessMsg(body interface{}) *Resp {
 	return &Resp{Code: 0, Msg: "success", Body: body}
 }
+
+const (
+	NORMAL = iota
+	SUPER
+)
