@@ -24,12 +24,12 @@ func (h *apiHandler) DownloadLinkConfirmed(e echo.Context) error {
 		log.Logger().Errorf("DownloadLinkConfirmed: check user's right failed - %v", err)
 		return err
 	}
-	elements, err := module.ReadLinksConfirmed()
+	links, err := module.ReadLinksConfirmed()
 	if err != nil {
 		log.Logger().Errorf("DownloadLinkConfirmed: %v", err)
 		return err
 	}
-	rsp, err := json.Marshal(elements)
+	rsp, err := json.Marshal(links)
 	if err != nil {
 		log.Logger().Errorf("DownloadLinkConfirmed: json marshal error - %v", err)
 		return err
@@ -83,4 +83,39 @@ func (h *apiHandler) DownloadElementsByConfirmedLink(e echo.Context) error {
 		return defines.ComInnerError
 	}
 	return e.Attachment(file.Name(), "elements.json")
+}
+
+func (h *apiHandler) DownloadLinkConfirmedPerfect(e echo.Context) error {
+	userId, err := token.GetTokenId(e)
+	if err != nil {
+		log.Logger().Errorf("DownloadLinkConfirmedPerfect: %+v", err)
+		return err
+	}
+	if err := module.CheckUserDownload(userId); err != nil {
+		log.Logger().Errorf("DownloadLinkConfirmedPerfect: check user's right failed - %v", err)
+		return err
+	}
+	links, err := module.ReadLinksConfirmedPerfect()
+	if err != nil {
+		log.Logger().Errorf("DownloadLinkConfirmedPerfect: %v", err)
+		return err
+	}
+	rsp, err := json.Marshal(links)
+	if err != nil {
+		log.Logger().Errorf("DownloadLinkConfirmedPerfect: json marshal error - %v", err)
+		return err
+	}
+
+	file, err := ioutil.TempFile("", fmt.Sprintf("links_perfect.json"))
+	if err != nil {
+		log.Logger().Errorf("DownloadLinkConfirmedPerfect: failed to create temp json - %v", err)
+		return defines.ComInnerError
+	}
+	defer os.Remove(file.Name())
+
+	if _, err := file.Write(rsp); err != nil {
+		log.Logger().Errorf("DownloadLinkConfirmedPerfect: failed to write temp json - %v", err)
+		return defines.ComInnerError
+	}
+	return e.Attachment(file.Name(), "links_perfect.json")
 }

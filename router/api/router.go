@@ -33,4 +33,5 @@ func Routers(e *echo.Group) {
 
 	user.GET("/download/links", h.DownloadLinkConfirmed)
 	user.GET("/download/elements", h.DownloadElementsByConfirmedLink)
+	user.GET("/download/links/perfect", h.DownloadLinkConfirmedPerfect)
 }

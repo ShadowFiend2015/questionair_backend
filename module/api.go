@@ -289,6 +289,23 @@ func ReadLinksConfirmed() ([]RspLinkDownload, error) {
 	return rsp, nil
 }
 
+func ReadLinksConfirmedPerfect() ([]RspLinkDownloadPerfect, error) {
+	var rsp []RspLinkDownloadPerfect
+	links, err := readLinksElementConfirmed()
+	if err != nil {
+		log.Logger().Errorf("ReadLinksConfirmedPerfect: read links error - %v", err)
+		return rsp, defines.SqlReadError
+	}
+	for _, link := range links {
+		rsp = append(rsp, RspLinkDownloadPerfect{
+			Element1: RspElementLinkedPerfect{link.ElementCode1, link.LinkElementName1, scopeIdMap[link.ScopeId1].Name},
+			Element2: RspElementLinkedPerfect{link.ElementCode2, link.LinkElementName2, scopeIdMap[link.ScopeId2].Name},
+			Confirm:  link.Status,
+		})
+	}
+	return rsp, nil
+}
+
 func UpdateLink(linkId int64, hostScope string, confirm int) error {
 	link, err := readLinkById(linkId)
 	if err != nil {

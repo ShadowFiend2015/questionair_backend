@@ -62,6 +62,12 @@ type RspElementLinked struct {
 	ElementName string `json:"name"`
 }
 
+type RspElementLinkedPerfect struct {
+	ElementCode string `json:"code"`
+	ElementName string `json:"name"`
+	ScopeName   string `json:"scope"`
+}
+
 // ScopeId1 < ScopeId2
 // status: 0 - no confirm, 1 - element_code_1 confirmed, 2 - element_code_2 confirmed, 3 - both confirmed
 type Link struct {
@@ -92,6 +98,12 @@ type RspLinkSelf struct {
 type RspLinkDownload struct {
 	Element1 string `json:"a"`
 	Element2 string `json:"b"`
+}
+
+type RspLinkDownloadPerfect struct {
+	Element1 RspElementLinkedPerfect `json:"a"`
+	Element2 RspElementLinkedPerfect `json:"b"`
+	Confirm  int                     `json:"confirm"`
 }
 
 type RspLinkId struct {
